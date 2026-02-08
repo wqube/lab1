@@ -1,9 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">lab1</string>
+    <string name="app_name">Business Card</string>
 
     <string name="fullName">Mikhail Baranov</string>
     <string name="group">Group B23-191-2</string>
-    <string name="description">full stack programmer</string>
+    <string name="description">Full stack programmer</string>
 
     <string name="phoneNumber">+7 951 191 77 66</string>
     <string name="id">@wqube</string>

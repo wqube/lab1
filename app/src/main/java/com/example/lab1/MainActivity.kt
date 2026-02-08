@@ -6,33 +6,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
-import com.example.lab1.ui.theme.Lab1Theme
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.snapping.SnapPosition
-import androidx.compose.foundation.layout.Box
-import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.core.graphics.alpha
-
+import com.example.lab1.ui.Contacts
+import com.example.lab1.ui.FullName
+import com.example.lab1.ui.theme.Lab1Theme
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -41,112 +28,121 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Lab1Theme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                Scaffold { padding ->
                     GreetingPage(
                         fullName = stringResource(R.string.fullName),
+                        group = stringResource(R.string.group),
                         description = stringResource(R.string.description),
                         phoneNumber = stringResource(R.string.phoneNumber),
                         id = stringResource(R.string.id),
-                        email = stringResource(R.string.email)
+                        email = stringResource(R.string.email),
+                        modifier = Modifier.padding(padding)
                     )
                 }
-
             }
         }
     }
 }
 
-@Composable
-fun FullName(fullName: String, description: String, modifier: Modifier = Modifier) {
-    Column (
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier
-    )
-    {
-        Text(
-            text = fullName,
-            fontSize = 20.sp,
-            lineHeight = 10.sp,
-            textAlign = TextAlign.Center
-        )
-        Text(
-            text = description,
-            fontSize = 12.sp,
-            modifier = Modifier
-                .padding(16.dp)
-                .align(alignment = Alignment.CenterHorizontally)
-        )
-    }
-}
-
-@Composable
-fun Contacts(phoneNumber: String, id: String, email: String, modifier: Modifier = Modifier) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-    )
-    {
-        Text(text = phoneNumber)
-        Text(text = id)
-        Text(text = email)
-    }
-}
-
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun GreetingPage(
     fullName: String,
+    group: String,
     description: String,
     phoneNumber: String,
     id: String,
     email: String,
-    modifier: Modifier = Modifier)
-{
-    val imageBackground = painterResource(R.drawable.androidparty)
-    val imagePhoto = painterResource(R.drawable._026_02_06_02_06_27)
-    Box(modifier = modifier.fillMaxSize()) {
+    modifier: Modifier = Modifier
+) {
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+        val imageBackground = painterResource(R.drawable.androidparty)
+        val imagePhoto = painterResource(R.drawable._026_02_06_02_06_27)
+
+        val avatarPadding = dimensionResource(R.dimen.group_padding)
+        val contactBottomPadding = dimensionResource(R.dimen.contacts_bottom_padding)
+
         Image(
             painter = imageBackground,
-            contentDescription = "Background",
-            alpha = 0.1F,
+            contentDescription = stringResource(R.string.background_desc),
+            alpha = 0.1f,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.align(Alignment.Center)
-        ) {
-            Image(
-                painter = imagePhoto,
-                contentDescription = "Photo",
-                modifier = Modifier.padding(bottom = 16.dp)
+
+        if (maxWidth < 600.dp) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Image(
+                    painter = imagePhoto,
+                    contentDescription = stringResource(R.string.photo_desc),
+                    modifier = Modifier.padding(bottom = avatarPadding)
+                )
+
+                FullName(fullName, group, description)
+            }
+
+            Contacts(
+                phoneNumber, id, email,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = contactBottomPadding)
             )
-            FullName(
-                fullName = fullName,
-                description = description
-            )
+
+        } else {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(32.dp)
+            ) {
+                Image(
+                    painter = imagePhoto,
+                    contentDescription = stringResource(R.string.photo_desc),
+                    modifier = Modifier.padding(bottom = avatarPadding)
+                )
+
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    FullName(fullName, group, description)
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Contacts(phoneNumber, id, email)
+                }
+            }
         }
+    }
+}
 
-        Contacts(
-            phoneNumber = phoneNumber,
-            id = id,
-            email = email,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 50.dp)
-
+@Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@Composable
+fun BusinessCardPortraitPreview() {
+    Lab1Theme {
+        GreetingPage(
+            fullName = stringResource(R.string.fullName),
+            group = stringResource(R.string.group),
+            description = stringResource(R.string.description),
+            phoneNumber = stringResource(R.string.phoneNumber),
+            id = stringResource(R.string.id),
+            email = stringResource(R.string.email)
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 800, heightDp = 480)
 @Composable
-fun BusinessCard() {
+fun BusinessCardLandscapePreview() {
     Lab1Theme {
         GreetingPage(
             fullName = stringResource(R.string.fullName),
+            group = stringResource(R.string.group),
             description = stringResource(R.string.description),
             phoneNumber = stringResource(R.string.phoneNumber),
             id = stringResource(R.string.id),
