@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Визитка</string>
+
+    <string name="fullName">Михаил Баранов</string>
+    <string name="group">Группа Б23-191-2</string>
+    <string name="description">Фулстек-разработчик</string>
+
+    <string name="phoneNumber">+7 951 191 77 66</string>
+    <string name="id">@wqube</string>
+    <string name="email">misabaranov8@gmail.com</string>
+
+    <string name="photo_desc">Фото пользователя</string>
+    <string name="background_desc">Фоновое изображение</string>
+</resources>
