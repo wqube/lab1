@@ -2,6 +2,7 @@
 <resources>
     <dimen name="contacts_bottom_padding">32dp</dimen>
     <dimen name="group_padding">16dp</dimen>
+    <dimen name="transition">600dp</dimen>
 
     <dimen name="text_name">20sp</dimen>
     <dimen name="text_group">16sp</dimen>
